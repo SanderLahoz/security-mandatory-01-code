@@ -1,22 +1,38 @@
 
-def find_secret_key(prime, generator, public_key):
-    for private_key in range(prime - 1): # 0 <= x <= p - 2
-        if pow(generator, private_key, prime) == public_key:
+def find_secret_key(prime_modulus, generator, public_key):
+    """
+    Brute force all combinations for private_key in range:
+    (0 <= private_key <= prime_modulus - 2). Using modular exponentiation
+    and this formula: generator^private_key mod prime_modulus = public_key
+    returns private_key
+    """
+    for private_key in range(prime_modulus - 1):
+        if pow(generator, private_key, prime_modulus) == public_key:
             return private_key
 
+def decrypt_message(prime_modulus, ephemeral_randomness, public_key, cipher_text2):
 
-"""This decryption method is wrong should be looked at, before moving on"""
-def decrypt_message(prime, encrypted_randomness, public_key, encrypted_message):
-    for m in range(1, prime): # 1 <= m <= p - 1
-        if pow(m * public_key, encrypted_randomness, prime) == encrypted_message:
+    shared_secret = pow(public_key, ephemeral_randomness, prime_modulus)
+    for m in range(prime_modulus):
+        if (m * shared_secret) % prime_modulus == cipher_text2:
             return m
 
 def main():
     # Initiate constants:
-    p, g, PK, c1, c2 = 29837, 42, 22690, 23447, 8372
-    x, r = find_secret_key(p, g, PK), find_secret_key(p, g, c1)
-    message = decrypt_message(p, r, PK, c2)
-    print(f"Private key: {x}\nPlaintext: {message}")
+    _prime_modulus = 29837
+    _generator = 42
+    _public_key = 22690
+    _cipher_text1 = 23447
+    _cipher_text2 = 8372
+
+    # Brute force the secret key and encryption randomness
+    _private_key = find_secret_key(_prime_modulus, _generator, _public_key)
+    _ephemeral_randomness = find_secret_key(_prime_modulus, _generator, _cipher_text1)
+
+    # Decrypt the message using the recovered variables above
+    _message = decrypt_message(_prime_modulus, _ephemeral_randomness, _public_key, _cipher_text2)
+
+    print(f"Private key: {_private_key}\nPlaintext: {_message}")
 
 if __name__ == '__main__':
     main()
