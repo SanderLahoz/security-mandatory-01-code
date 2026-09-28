@@ -7,7 +7,7 @@ def custom_hash(m, b):
     if not b in {16, 24, 32}:
         raise ValueError("Invalid value for b expected 16, 24 or 32")
 
-    print(sha256(m).hexdigest()[:b//4])
+    return sha256(m).hexdigest()[:b//4]
 
 def collision_search(b):
 
@@ -29,9 +29,10 @@ def collision_search(b):
 
 
 def main():
-    test = b"hej"
-    custom_hash(test, 32)
-
+    for b in (16, 24, 32):
+        m1, m2, h = collision_search(b)
+        print(f"Collision found for b = {b}")
+        print(f"Message 1: {m1.hex()}, Message 2: {m2.hex()}, Shared hash: {h}")
 
 
 if __name__ == '__main__':
