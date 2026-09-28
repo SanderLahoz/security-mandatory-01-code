@@ -40,6 +40,8 @@ def verify_result(
     # simulating the encryption produces the same cipher_text
     assert (message * pow(public_key, ephemeral_randomness, prime_modulus)) % prime_modulus == cipher_text2
 
+    print("Verification successful")
+
 
 def main():
     # Initiate constants:
