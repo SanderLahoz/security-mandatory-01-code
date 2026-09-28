@@ -24,15 +24,7 @@ def decrypt_message(prime_modulus, ephemeral_randomness, public_key, cipher_text
         if (m * shared_secret) % prime_modulus == cipher_text2:
             return m
 
-def verify_result(
-        prime_modulus,
-        secret_key,
-        generator,
-        public_key,
-        message,
-        ephemeral_randomness,
-        cipher_text2
-):
+def verify_result(prime_modulus, secret_key, generator, public_key, message, ephemeral_randomness, cipher_text2):
     # the secret key satisfies the public key equation
     assert pow(generator, secret_key, prime_modulus) == public_key
 
