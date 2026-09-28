@@ -1,17 +1,22 @@
 
 def find_secret_key(prime_modulus, generator, public_key):
     """
-    Brute force all combinations for private_key in range:
+    Brute force all combinations for the private key in range:
     (0 <= private_key <= prime_modulus - 2). Using modular exponentiation
     and this formula: generator^private_key mod prime_modulus = public_key
-    returns private_key
+    :return: private_key
     """
     for private_key in range(prime_modulus - 1):
         if pow(generator, private_key, prime_modulus) == public_key:
             return private_key
 
 def decrypt_message(prime_modulus, ephemeral_randomness, public_key, cipher_text2):
-
+    """
+    Compute the shared secret and brute force the message by looping through
+    all possible messages returning the message where (m * shared secret)
+    modulus the large prime number is equal to the second intercepted cipher_text
+    :return: message
+    """
     shared_secret = pow(public_key, ephemeral_randomness, prime_modulus)
     for m in range(prime_modulus):
         if (m * shared_secret) % prime_modulus == cipher_text2:
