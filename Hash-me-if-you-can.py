@@ -1,3 +1,4 @@
+import os
 from hashlib import sha256
 
 
@@ -8,11 +9,23 @@ def custom_hash(m, b):
 
     print(sha256(m).hexdigest()[:b//4])
 
-def collision_search(m1, m2, b):
-    if m1 == m2:
-        raise ValueError("message 1 and message 2 should be distinct")
+def collision_search(b):
 
-    return custom_hash(m1, b) == custom_hash(m2, b)
+    hash_to_message_dict = {}
+
+    while True:
+        random_message = os.urandom(8)
+        hashed_message = custom_hash(random_message, b)
+
+        if hashed_message in hash_to_message_dict:
+            collided_message = hash_to_message_dict[hashed_message]
+
+            # Make sure that the collided messages actually are different
+            if random_message != hashed_message:
+                return collided_message, random_message, hashed_message
+
+        else:
+            hash_to_message_dict[hashed_message] = random_message
 
 
 def main():
