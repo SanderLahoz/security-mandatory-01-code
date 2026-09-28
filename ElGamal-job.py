@@ -1,4 +1,6 @@
 
+
+"""Brute force attack (Exhaustive search)"""
 def find_secret_key(prime_modulus, generator, public_key):
     """
     Brute force all combinations for the private key in range:
@@ -42,6 +44,11 @@ def verify_result(
 
     print("Verification successful")
 
+"""Byzantine network: Ciphertext Malleability attack"""
+def modify_ciphertext(prime_modulus, cipher_text1, cipher_text2, message, message_target):
+    """Return (c1, c2') that decrypts to message_target, using no secret values."""
+    factor = (message_target * pow(message, -1, prime_modulus)) % prime_modulus
+    return cipher_text1, (factor * cipher_text2) % prime_modulus
 
 def main():
     # Initiate constants:
@@ -70,6 +77,9 @@ def main():
 
     print(f"Private key: {_private_key}\nPlaintext: {_message}")
 
+
+    _message_target = 20000
+    (_, _cipher_text2_new) = modify_ciphertext(_prime_modulus, _cipher_text1, _cipher_text2, _message, _message_target)
 
 
 if __name__ == '__main__':
