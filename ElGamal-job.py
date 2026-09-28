@@ -38,7 +38,7 @@ def verify_result(prime_modulus, secret_key, generator, public_key, message, eph
 
 """Byzantine network: Ciphertext Malleability attack"""
 def modify_ciphertext(prime_modulus, cipher_text1, cipher_text2, message, message_target):
-    """Return (c1, c2') that decrypts to message_target, using no secret values."""
+    """:return: (c1, c2') that decrypts to message_target, using no secret values."""
     factor = (message_target * pow(message, -1, prime_modulus)) % prime_modulus
     return cipher_text1, (factor * cipher_text2) % prime_modulus
 
