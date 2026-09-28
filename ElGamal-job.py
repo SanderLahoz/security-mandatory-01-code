@@ -22,6 +22,25 @@ def decrypt_message(prime_modulus, ephemeral_randomness, public_key, cipher_text
         if (m * shared_secret) % prime_modulus == cipher_text2:
             return m
 
+def verify_result(
+        prime_modulus,
+        secret_key,
+        generator,
+        public_key,
+        message,
+        ephemeral_randomness,
+        cipher_text2
+):
+    # the secret key satisfies the public key equation
+    assert pow(generator, secret_key, prime_modulus) == public_key
+
+    # the message is in the valid range
+    assert 1 <= message <= prime_modulus - 1
+
+    # simulating the encryption produces the same cipher_text
+    assert (message * pow(public_key, ephemeral_randomness, prime_modulus)) % prime_modulus == cipher_text2
+
+
 def main():
     # Initiate constants:
     _prime_modulus = 29837
@@ -37,7 +56,19 @@ def main():
     # Decrypt the message using the recovered variables above
     _message = decrypt_message(_prime_modulus, _ephemeral_randomness, _public_key, _cipher_text2)
 
+    verify_result(
+        _prime_modulus,
+        _private_key,
+        _generator,
+        _public_key,
+        _message,
+        _ephemeral_randomness,
+        _cipher_text2
+    )
+
     print(f"Private key: {_private_key}\nPlaintext: {_message}")
+
+
 
 if __name__ == '__main__':
     main()
