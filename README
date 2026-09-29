@@ -1,0 +1,18 @@
+# Simple Python Scripts
+
+A collection of standalone Python scripts.
+
+## Prerequisites
+
+* **Python 3.10+**
+* **Dependencies:** None (uses standard library only)
+
+---
+
+## Getting Started
+
+1. **Open your terminal or command prompt** and navigate to the project folder root.
+run these commands:
+python ./ELGamal-job.py
+python ./Hash-me-if-you-can.py
+python ./BAD_cipher.py
