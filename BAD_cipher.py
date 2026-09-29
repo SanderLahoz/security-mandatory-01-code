@@ -25,6 +25,16 @@ def encrypt(plaintext: bytes, key1: bytes, key2: bytes) -> bytes:
     return xor(rotate_left_13(xor(plaintext, key1)), key2)
 
 
+def rotate_right_13(block: bytes) -> bytes:
+    if len(block) != BLOCK_BYTES:
+        raise ValueError("Expected exactly 16 bytes")
+    value = int.from_bytes(block, "big")
+    return ((value >> 13) | ((value << 115) & MASK)).to_bytes(16, "big")
+
+def decrypt(ciphertext: bytes, key1: bytes, key2: bytes) -> bytes:
+    return xor(rotate_right_13(xor(ciphertext, key2)), key1)
+
+
 if __name__ == "__main__":
     # Public test vector. These are NOT the challenge keys.
     p = bytes(16)
@@ -33,3 +43,4 @@ if __name__ == "__main__":
     expected = "00000000000000000000000000002000"
     assert encrypt(p, k1, k2).hex() == expected
     print("Public test vector passed:", expected)
+    print("The plain text is: " )
